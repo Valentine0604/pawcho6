@@ -1,4 +1,4 @@
-# cloudy_docker
+# pawcho6
 PAwCHO 
 
 Aby zbudować obraz należy użyć polecenia 
@@ -13,11 +13,12 @@ Aby uruchomić kontener należy użyć polecenia
 docker run -p numer_portu --name=nazwa_kontenera nazwa_obrazu
 ```
 
-Efekt działania aplikacji node.js
+Efekt działania aplikacji
 
-![image](https://github.com/Valentine0604/cloudy_docker/assets/106283972/07a99e17-3326-4a37-9fec-741bfcb38c71)
+![image](https://github.com/Valentine0604/pawcho6/assets/106283972/3e0bc1c5-f76b-444e-b435-5bc423def006)
 
-Efekt działania aplikacji na nginx
 
-![nginx](https://github.com/Valentine0604/cloudy_docker/assets/106283972/179d16a2-2698-4d3b-84a6-42112c4911ec)
-
+Link do package pawcho6
+```
+https://github.com/users/Valentine0604/packages/container/package/pawcho6
+```
