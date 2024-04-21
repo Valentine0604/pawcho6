@@ -1,49 +1,52 @@
-FROM scratch as build1
+# Stage 1: Budowanie aplikacji React
+FROM alpine:latest AS build1
 
+# Dodanie systemu plików Alpine
 ADD alpine-minirootfs-3.19.1-x86_64.tar /
 
+# Aktualizacja i instalacja pakietów
 RUN apk update --no-cache && \
     apk upgrade --no-cache && \
     apk add --no-cache nodejs npm openssh-client git
 
-COPY id_ed25519.pub /root/.ssh/id_ed25519.pub
-
-RUN chmod 600 /root/.ssh/id_ed25519.pub
-    
-RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
-
-RUN npx create-react-app super_react
-
-WORKDIR /super_react
-
 RUN mkdir -p /pawcho6
 
-RUN git clone git@github.com:Valentine0604/pawcho6.git /pawcho6 && \
-    mv /pawcho6/App.js /super_react/src/App.js
+# Dodanie klucza prywatnego SSH jako secret
+RUN --mount=type=secret,id=ssh_key \
+    mkdir -p ~/.ssh && \
+    cp /run/secrets/ssh_key ~/.ssh/id_rsa && \
+    chmod 600 ~/.ssh/id_rsa && \
+    ssh-keyscan github.com >> ~/.ssh/known_hosts
 
+# Pobranie repozytorium GitHub po dodaniu klucza SSH
+RUN git clone git@github.com:Valentine0604/pawcho6.git pawcho6
+
+# Tworzenie aplikacji React
+RUN npx create-react-app super_react
+
+RUN mv /pawcho6/App.js /super_react/src/App.js
+
+# Ustawienie katalogu roboczego
 WORKDIR /super_react
 
-ARG VERSION
-ENV REACT_APP_VERSION=${VERSION}
-
+# Instalacja zależności i budowa aplikacji
 RUN npm install && \
     npm run build
 
+# Stage 2: Tworzenie obrazu NGINX
 FROM nginx:latest
+ENV APP_VER=production.${VERSION:-v1.0}
 
-ARG VERSION
-ENV REACT_APP_VERSION=${VERSION}
-RUN echo $REACT_APP_VERSION
-
-LABEL org.opencontainers.image.authors="pawcho6@docker.org"
-LABEL org.opencontainers.image.version="$VERSION"
-
+# Kopiowanie plików z aplikacji React do katalogu html NGINX
 COPY --from=build1 /super_react/build/. /var/www/html
 COPY --from=build1 /pawcho6/default.conf /etc/nginx/conf.d/default.conf
 
+# Eksponowanie portu 80
 EXPOSE 80
 
+# Konfiguracja Healthcheck
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
   CMD wget -qO- http://localhost:80/healthcheck || exit 1
 
+# Uruchomienie serwera NGINX
 CMD ["nginx", "-g", "daemon off;"]
