@@ -14,7 +14,7 @@ docker run -p numer_portu --name=nazwa_kontenera nazwa_obrazu
 ```
 
 Efekt działania aplikacji
+![image](https://github.com/Valentine0604/pawcho6/assets/106283972/3e0bc1c5-f76b-444e-b435-5bc423def006)
 
-![image](https://github.com/Valentine0604/pawcho6/assets/106283972/e6c34d2d-45b2-405e-ac15-7341df9d671b)
 
 
