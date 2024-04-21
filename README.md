@@ -18,4 +18,7 @@ Efekt działania aplikacji
 ![image](https://github.com/Valentine0604/pawcho6/assets/106283972/3e0bc1c5-f76b-444e-b435-5bc423def006)
 
 
-
+Link do package pawcho6
+```
+https://github.com/users/Valentine0604/packages/container/package/pawcho6
+```
