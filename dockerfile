@@ -41,6 +41,9 @@ ENV APP_VER=production.${VERSION:-v1.0}
 COPY --from=build1 /super_react/build/. /var/www/html
 COPY --from=build1 /pawcho6/default.conf /etc/nginx/conf.d/default.conf
 
+LABEL org.opencontainers.image.authors="pawcho6@lab6.org"
+LABEL org.opencontainers.image.version="$VERSION"
+
 # Eksponowanie portu 80
 EXPOSE 80
 
