@@ -1,5 +1,5 @@
 # Stage 1: Budowanie aplikacji React
-FROM alpine:latest AS build1
+FROM scratch AS build1
 
 # Dodanie systemu plików Alpine
 ADD alpine-minirootfs-3.19.1-x86_64.tar /
@@ -35,7 +35,7 @@ RUN npm install && \
 
 # Stage 2: Tworzenie obrazu NGINX
 FROM nginx:latest
-ENV APP_VER=production.${VERSION:-v1.0}
+ENV REACT_APP_VERSION=production.v1.0
 
 # Kopiowanie plików z aplikacji React do katalogu html NGINX
 COPY --from=build1 /super_react/build/. /var/www/html
